@@ -282,7 +282,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
 });
 function renderAll(){renderCats();renderDict();renderAbc();}
 (async()=>{
-  try{const r=await fetch('words.json');WORDS=prep(await r.json());}catch(e){WORDS=prep(FALLBACK);}
+  try{const r=await fetch('data/words.json');WORDS=prep(await r.json());}catch(e){WORDS=prep(FALLBACK);}
   renderAll();
 })();
 (async()=>{

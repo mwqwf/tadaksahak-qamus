@@ -1,7 +1,7 @@
 <title>قاموس تدكصهك</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Kufi+Arabic:wght@500;700&display=swap">
 <style>
-/* التخطيط: عمود واحد بعرض القراءة، شريط تبويب علوي، بطاقات مدخل بحافّة نيلية */
+/* التخطيط: عمود واحد بعرض القراءة، تبويبات علوية ثابتة، بطاقات بحافّة نيلية لون اللثام */
 :root{
   --bg:#f6f2ea; --surface:#fffdf8; --fg:#1d1a26; --muted:#6b6577; --line:#e3dccd;
   --indigo:#2f3a8f; --indigo-soft:#e6e8f6; --ok:#2f7d4f; --warn:#a8641b;
@@ -15,197 +15,284 @@
   --bg:#15141c; --surface:#1e1d28; --fg:#ece8f2; --muted:#a39db0; --line:#2f2d3c;
   --indigo:#9fa9ff; --indigo-soft:#262a4a; --ok:#6fcf97; --warn:#e8a65a; color-scheme:dark}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.7;direction:rtl}
-.wrap{max-width:46rem;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:grid;gap:18px}
-h1{font-family:var(--display);font-size:1.7rem;margin:0;text-wrap:balance;color:var(--indigo)}
-h2{font-family:var(--display);font-size:1.15rem;margin:0}
-.lead{margin:0;color:var(--muted)}
+.wrap{max-width:46rem;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:grid;gap:16px}
+h1{font-family:var(--display);font-size:1.7rem;margin:0;color:var(--indigo)}
+h2{font-family:var(--display);font-size:1.1rem;margin:0}
+.lead,.note{margin:0;color:var(--muted)} .note{font-size:.9rem}
 nav{display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:8px;z-index:2}
-nav button{font-family:var(--display);font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 14px;border-radius:999px;cursor:pointer}
-nav button[aria-selected="true"]{background:var(--indigo);color:var(--bg);border-color:var(--indigo)}
-button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
-input,textarea{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;box-sizing:border-box}
-.entry{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--indigo);border-radius:6px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+nav button,.cat{font-family:var(--display);font-size:.88rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 14px;border-radius:999px;cursor:pointer}
+nav button[aria-selected="true"],.cat[aria-pressed="true"]{background:var(--indigo);color:var(--bg);border-color:var(--indigo)}
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.cat{font-size:.78rem;padding:4px 10px;white-space:nowrap}
+button:focus-visible,input:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+input{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;box-sizing:border-box}
+.list{display:grid;gap:8px}
+.entry{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--indigo);border-radius:6px;padding:10px 14px;display:grid;gap:4px;min-width:0}
 .head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
-.word{font-size:1.6rem;font-weight:700}
-.latin{direction:ltr;font-family:ui-monospace,monospace;font-size:.85rem;color:var(--muted)}
-.pos{font-size:.8rem;color:var(--muted)}
-.chip{font-family:var(--display);font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--indigo-soft);color:var(--indigo)}
+.word{font-size:1.55rem;font-weight:700}
+.mean{font-size:1.05rem}
+.meta{font-size:.8rem;color:var(--muted)}
+.latin{direction:ltr;unicode-bidi:isolate;font-family:ui-monospace,monospace;font-size:.8rem;color:var(--muted)}
+.chip{font-family:var(--display);font-size:.7rem;padding:2px 8px;border-radius:999px;background:var(--indigo-soft);color:var(--indigo)}
 .chip.c1{color:var(--warn)} .chip.c2{color:var(--ok)}
-.list{display:grid;gap:10px}
-.row{display:flex;flex-wrap:wrap;gap:8px}
-.btn{font-family:var(--display);font-size:.85rem;border:1px solid var(--indigo);background:transparent;color:var(--indigo);padding:6px 14px;border-radius:8px;cursor:pointer}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font-family:var(--display);font-size:.82rem;border:1px solid var(--indigo);background:transparent;color:var(--indigo);padding:5px 12px;border-radius:8px;cursor:pointer}
 .btn.primary{background:var(--indigo);color:var(--bg)}
 .kbd{display:flex;flex-wrap:wrap;gap:4px}
-.kbd button{font-family:var(--body);font-size:1.25rem;min-width:2.4rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;cursor:pointer;padding:2px 6px}
-.note{font-size:.9rem;color:var(--muted);margin:0}
+.kbd button{font-family:var(--body);font-size:1.2rem;min-width:2.3rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;cursor:pointer;padding:0 6px}
 .tablewrap{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:.95rem}
-th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:start}
-td.big{font-size:1.4rem}
+th,td{border-bottom:1px solid var(--line);padding:8px;text-align:start;vertical-align:top}
+th{font-family:var(--display);font-size:.8rem;color:var(--muted);font-weight:500}
+td.big{font-size:1.6rem;white-space:nowrap}
+.status{font-size:.9rem;color:var(--ok);min-height:1.4em;margin:0}
+.empty{color:var(--muted);text-align:center;padding:20px}
+.more{justify-self:center}
 form{display:grid;gap:8px}
 label{font-size:.85rem;color:var(--muted)}
-.empty{color:var(--muted);text-align:center;padding:20px}
-.status{font-size:.9rem;color:var(--ok);min-height:1.5em;margin:0}
+.rules{margin:0;padding-inline-start:1.2rem;display:grid;gap:4px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
   <header>
     <h1>قاموس تدكصهك</h1>
-    <p class="lead">لسان الإدكصهك بالحرف العربي. كل كلمة هنا مرشّحة حتى يثبتها مراجعان من الناطقين.</p>
+    <p class="lead">لسان الإدكصهك بالحرف العربي. كل كلمة مرشّحة حتى يثبتها مراجعان من الناطقين.</p>
   </header>
 
-  <nav role="tablist">
-    <button id="t-dict" role="tab" aria-selected="true" data-tab="dict">القاموس</button>
-    <button id="t-rev" role="tab" aria-selected="false" data-tab="rev">المراجعة</button>
-    <button id="t-add" role="tab" aria-selected="false" data-tab="add">أضف كلمة</button>
-    <button id="t-abc" role="tab" aria-selected="false" data-tab="abc">الحروف</button>
+  <nav>
+    <button id="t-dict" aria-selected="true" data-tab="dict">القاموس</button>
+    <button id="t-tr" aria-selected="false" data-tab="tr">ترجم</button>
+    <button id="t-add" aria-selected="false" data-tab="add">أضف كلمة</button>
+    <button id="t-abc" aria-selected="false" data-tab="abc">الحروف</button>
   </nav>
 
   <section id="dict">
     <div style="display:grid;gap:10px">
-      <input id="q" type="search" placeholder="ابحث بالكلمة أو بالمعنى العربي">
+      <input id="q" type="search" placeholder="ابحث بالكلمة أو بالمعنى">
+      <div class="cats" id="cats"></div>
+      <p class="note" id="count"></p>
+      <p class="status" id="dictStatus"></p>
       <div class="list" id="dictList"></div>
+      <button class="btn more" id="more" hidden>المزيد</button>
     </div>
   </section>
 
-  <section id="rev" hidden>
+  <section id="tr" hidden>
     <div style="display:grid;gap:10px">
-      <p class="note">دفعة اليوم: كلمات لم تراجعها بعد. أكّد الصحيح، وصحّح ما يخالف نطقك، واكتب المعنى والمثال بأسلوبك.</p>
-      <p class="status" id="revStatus"></p>
-      <div class="list" id="revList"></div>
+      <p class="note">هذه معانٍ بالعربية. اكتب كيف تقولونها بتدكصهك، واترك ما لا تعرفه.</p>
+      <div class="kbd" id="trKbd"></div>
+      <p class="status" id="trStatus"></p>
+      <div class="list" id="trList"></div>
+      <button class="btn more" id="trNext">كلمات أخرى</button>
     </div>
   </section>
 
   <section id="add" hidden>
     <form id="addForm">
-      <label for="a-word">الكلمة بالحرف العربي مشكولة</label>
-      <input id="a-word" required>
-      <div class="kbd" data-target="a-word"></div>
-      <label for="a-mean">المعنى بالعربية</label>
-      <input id="a-mean" required>
-      <label for="a-ex">مثال من كلامكم وترجمته</label>
-      <textarea id="a-ex" rows="2"></textarea>
-      <label for="a-dom">المجال (الماشية، الماء، الخيمة، القرابة…)</label>
-      <input id="a-dom">
-      <div class="row"><button class="btn primary" type="submit">أرسل الكلمة</button></div>
+      <label for="a-word">الكلمة بتدكصهك</label>
+      <input id="a-word" required autocomplete="off">
+      <div class="kbd" data-for="a-word"></div>
+      <label for="a-mean">معناها بالعربية</label>
+      <input id="a-mean" required autocomplete="off">
+      <div class="row"><button class="btn primary" type="submit">أضف</button></div>
       <p class="status" id="addStatus"></p>
     </form>
   </section>
 
   <section id="abc" hidden>
-    <div style="display:grid;gap:10px">
-      <p class="note">حروف موسّعة لأصوات ليست في العربية، كلها موجودة في يونيكود وسبق استعمالها في لغات تكتب بالحرف العربي.</p>
-      <div class="tablewrap"><table id="abcTable"><thead><tr><th>الحرف</th><th>الصوت</th><th>اللاتيني</th><th>سبقنا إليه</th></tr></thead><tbody></tbody></table></div>
+    <div style="display:grid;gap:12px">
+      <h2>الحروف المقترحة للاعتماد</h2>
+      <p class="note">أصوات تدكصهك 32 صامتاً. أغلبها له حرف عربي. والقليل الباقي نكتبه بحروف عربية معروفة في لغات أخرى. وافق على كل حرف أو اقترح غيره.</p>
+      <p class="status" id="abcStatus"></p>
+      <div class="tablewrap"><table><thead><tr><th>الحرف</th><th>الصوت</th><th>مثال</th><th>رأيك</th></tr></thead><tbody id="abcBody"></tbody></table></div>
+      <h2>قواعد الكتابة</h2>
+      <ol class="rules">
+        <li>الكلمة تُكتب مشكولة كاملة.</li>
+        <li>الحركات القصيرة: فتحة وكسرة وضمة فقط. صوت e يُكتب كسرة، وصوت o يُكتب ضمة.</li>
+        <li>الحركات الطويلة بحروف المد: ا ي و.</li>
+        <li>الصائت المختلس (بين الفتحة والكسرة) يُكتب فتحة.</li>
+        <li>الحرف المشدَّد بشدّة، والساكن بسكون.</li>
+        <li>آخر الكلمة إن انتهت بصائت يُكتب بحرف مدّ، كما ننطقه.</li>
+      </ol>
+      <p class="note">نسختي الأولى كتبت e وo بعلامات غرب أفريقية، فبدت نقطةً زائدة تحت الحرف. أُلغيت.</p>
     </div>
   </section>
-
-  <p class="note">المصادر المنشورة تُستعمل لاقتراح الكلمات فقط؛ الشروح والأمثلة من عمل المراجعين.</p>
 </div>
 
 <script>
-// جدول التحويل من الإملاء اللاتيني اللساني إلى العربي — مصدر واحد للحقيقة
-const CONS={b:'ب',t:'ت',d:'د',k:'ك',g:'ڭ',q:'ق',c:'چ',j:'ج',f:'ف',s:'س',z:'ز','ʃ':'ش','ʒ':'ژ',x:'خ','ɣ':'غ','ħ':'ح','ʕ':'ع',h:'ه',w:'و',y:'ي',l:'ل',r:'ر',m:'م',n:'ن','ŋ':'ڠ','ɲ':'ڽ','ṭ':'ط','ḍ':'ض','ṣ':'ص','ẓ':'ظ','ḷ':'ڵ','ṛ':'ڕ','ṇ':'ڹ'};
-const SHORT={a:'َ',i:'ِ',u:'ُ',e:'ٜ',o:'ٗ'};
-const LONG={a:'ا',i:'ي',u:'و',e:'ێ',o:'ۆ'};
-const INIT={a:'أَ',i:'إِ',u:'أُ',e:'أٜ',o:'أٗ'};
+// ===== الحروف: مصدر واحد للتحويل وللجدول =====
+const LETTERS=[
+ // [لاتيني، عربي، وصف الصوت، مثال، مقرَّر سلفاً؟]
+ ['g','ڭ','ڨ المغاربية','كما في الحسانية',false],
+ ['c','ش','بين التاء والشين (الأطروحة: تش)','ليل',false],
+ ['j','ج','الجيم الفصيحة','',true],
+ ['ʒ','ژ','الجيم الشامية','كما في الفارسية',false],
+ ['ŋ','ڠ','النون الخيشومية (نغ)','',false],
+ ['ṭ','ط','التاء المفخّمة','',true],['ḍ','ض','الدال المفخّمة','',true],
+ ['ṣ','ص','السين المفخّمة','',true],['ẓ','ظ','الزاي المفخّمة','',true],
+ ['ḷ','ڵ','اللام المفخّمة','كما في الكردية',false],
+ ['ṛ','ڕ','الراء المفخّمة','كما في الكردية',false],
+ ['ṇ','ڹ','النون المفخّمة','نقطة تحت النون',false],
+ ['ʃ','ش','الشين','',true],['x','خ','الخاء','',true],['ɣ','غ','الغين','',true],['q','ق','القاف','',true],
+ ['ħ','ح','الحاء','',true],['ʕ','ع','العين','',true],['h','ه','الهاء','',true],
+ ['b','ب','','',true],['t','ت','','',true],['d','د','','',true],['k','ك','','',true],['f','ف','','',true],
+ ['s','س','','',true],['z','ز','','',true],['w','و','','',true],['y','ي','','',true],['l','ل','','',true],
+ ['r','ر','','',true],['m','م','','',true],['n','ن','','',true]
+];
+const CONS=Object.fromEntries(LETTERS.map(l=>[l[0],l[1]]));
+const SH={a:'َ',e:'ِ',i:'ِ',o:'ُ',u:'ُ','ǝ':'َ','ə':'َ'};
+const LONG={a:'ا',e:'ي',i:'ي',o:'و',u:'و'};
+const INIT={a:'أَ',e:'إِ',i:'إِ',o:'أُ',u:'أُ','ǝ':'أَ','ə':'أَ'};
 function toArabic(lat){
-  const s=lat.normalize('NFD').replace(/[̀-̂̄]/g,'').normalize('NFC').toLowerCase().replace(/[-\s]/g,'');
+  const s=lat.normalize('NFD').replace(/[̀-̂̄̆]/g,'').normalize('NFC').toLowerCase().replace(/[-\s=()]/g,'');
   const ch=[...s]; let out='';
   for(let i=0;i<ch.length;i++){
-    const c=ch[i], v=SHORT[c]!==undefined;
-    if(v){
-      const long=ch[i+1]===c;
-      if(i===0){out+=INIT[c]; if(long){out+=c==='a'?'ا':LONG[c];i++;} continue;}
-      if(long){out+=(c==='e'||c==='o'?'':SHORT[c])+LONG[c]; i++;} else out+=SHORT[c];
+    const c=ch[i];
+    if(SH[c]!==undefined){
+      const long=ch[i+1]===c&&LONG[c], last=i+(long?2:1)>=ch.length;
+      if(i===0) out+=INIT[c]; else out+=SH[c];
+      if(long){out+=LONG[c];i++;}
+      else if(last&&LONG[c]) out+=LONG[c];          // الصائت الأخير يُكتب ممدوداً
       continue;
     }
-    if(c==='ə'){continue;}
     const L=CONS[c]; if(!L) continue;
-    if(ch[i+1]===c){out+=L+'ّ'; i++;} else out+=L;
-    const nx=ch[i+1];
-    if(nx===undefined||(SHORT[nx]===undefined&&nx!=='ə')) out+='ْ';
+    const dbl=ch[i+1]===c; out+=L+(dbl?'ّ':''); if(dbl)i++;
+    const nx=ch[i+1]; if(nx===undefined||SH[nx]===undefined) out+='ْ';
   }
-  return out;
+  return out.replace(/ْ$/,'');
 }
+const KEYS=['ڭ','ژ','ڠ','ڵ','ڕ','ڹ','ط','ض','ص','ظ','َ','ِ','ُ','ْ','ّ'];
 
-// كلمات مرشّحة (الكلمة فقط من قائمة مفتوحة CC0؛ المعنى العربي من صياغتنا وينتظر المراجعة)
-const SEED=[
-['aryén','اسم جمع','ماء','الماء'],['kud-én','اسم جمع','دم','الجسد'],['wayní','اسم','شمس','الطبيعة'],['cijí','اسم','ليل','الزمن'],['zaɣrí','اسم','نهار، يوم','الزمن'],['mó','اسم','عين؛ وجه','الجسد'],['t-áa-ʃan','اسم','سِنّ','الجسد'],['hánʃi','اسم','كلب','الحيوان'],['hawú','اسم','بقرة','الماشية'],['hinciní','اسم','معز','الماشية'],['a-rgán','اسم','جمل فحل','الماشية'],['a-bíji','اسم','ابن آوى','الحيوان'],['gónʃi','اسم','ثعبان','الحيوان'],['a-báaleq','اسم','غبار','الطبيعة'],['a-handag','اسم','موضع، مكان','المكان'],['a-watay','اسم','سنة، عام','الزمن'],['mân','اسم','اسم؛ صيت','الناس'],['barjí','اسم','لحاء، ليف','النبات'],['a-lugus','اسم','أخو الزوج أو أخته','القرابة'],['nín','فعل متعدٍّ','شرب','الطعام'],['ŋá','فعل متعدٍّ','أكل','الطعام'],['fás','فعل متعدٍّ','حفر','العمل'],['sót','فعل متعدٍّ','قفز فوق شيء','الحركة'],['taw','فعل لازم','وصل','الحركة'],['cindí','فعل لازم','بقي، استراح','الحركة'],['beer-i','صفة','كبير','الصفات'],['hinká','عدد','اثنان','العدد'],['kaarád','عدد','ثلاثة','العدد'],['maará','عدد','عشرة','العدد'],['kar','أداة','عندما، إذا','الأدوات'],['har','أداة','حتى؛ إلا','الأدوات']
-].map((r,i)=>({id:'e'+String(i+1).padStart(4,'0'),lat:r[0],ar:toArabic(r[0]),pos:r[1],mean:r[2],dom:r[3]}));
+// ===== البيانات =====
+let WORDS=[];
+const FALLBACK=[['aryén','اسم','ماء','الماء والطبيعة'],['wayní','اسم','شمس','الماء والطبيعة'],['nín','فعل متعدٍّ','شرب','الطعام والشراب'],['ŋá','فعل متعدٍّ','أكل','الطعام والشراب'],['baarí','اسم','حصان','الماشية والحيوان']].map(r=>({lat:r[0],pos:r[1],mean:r[2],cat:r[3]}));
+function prep(list){return list.map((w,i)=>({...w,id:'w'+String(i+1).padStart(4,'0'),ar:toArabic(w.lat)}));}
 
-const ABC=[['ڭ','ڨ المغاربية (گ)','g','الحسانية والأمازيغية بالعربية'],['چ','تش','c','الفارسية والكردية'],['ژ','ج الشامية','ʒ','الفارسية والكردية'],['ڠ','نون خيشومية','ŋ','الجاوي (الملايوية)'],['ڽ','نْيَ','ɲ','الجاوي (الملايوية)'],['ڵ','لام مفخّمة','ḷ','الكردية'],['ڕ','راء مفخّمة','ṛ','الكردية'],['ڹ','نون مفخّمة','ṇ','قياساً على نقطة الأطروحة'],['ط ض ص ظ','المفخّمات','ṭ ḍ ṣ ẓ','العربية'],['بٜ / بێ','e قصيرة / طويلة','e / ee','عجميّ غرب أفريقيا / الكردية'],['بٗ / بۆ','o قصيرة / طويلة','o / oo','عجميّ غرب أفريقيا / الكردية']];
-const KEYS=['ڭ','چ','ژ','ڠ','ڽ','ڵ','ڕ','ڹ','ێ','ۆ','ٜ','ٗ','َ','ِ','ُ','ْ','ّ'];
-
-// الحالة المشتركة
-let db=null, me=null, reviews=[];
+// ===== الحالة المشتركة =====
+let db=null, me=null, reviews=[], letterVotes=[];
 const $=id=>document.getElementById(id);
-function verdicts(eid){const ok=new Set(reviews.filter(r=>r.entry===eid&&r.verdict==='ok').map(r=>r.uid));return ok.size;}
-function statusChip(eid){const n=verdicts(eid);return n>=2?'<span class="chip c2">مثبَت</span>':n===1?'<span class="chip c1">مؤكَّد من مراجع</span>':'<span class="chip">مرشّح</span>';}
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+const esc=s=>{const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;};
+function okCount(id){return new Set(reviews.filter(r=>r.entry===id&&r.verdict==='ok').map(r=>r.uid)).size;}
+function chip(id){const n=okCount(id);return n>=2?'<span class="chip c2">مثبَت</span>':n===1?'<span class="chip c1">أكّده مراجع</span>':'<span class="chip">مرشّح</span>';}
+function mine(id){return reviews.find(r=>r.entry===id&&r.uid===me);}
 
-function card(e,withActions){
-  return `<article class="entry" data-id="${e.id}">
-    <div class="head"><span class="word">${esc(e.ar)}</span><span class="latin">${esc(e.lat)}</span><span class="pos">${esc(e.pos)}</span>${statusChip(e.id)}</div>
-    <div>${esc(e.mean)}</div><div class="pos">${esc(e.dom)}</div>
-    ${withActions?`<div class="row"><button class="btn primary" data-act="ok">صحيح</button><button class="btn" data-act="fix">أصحّح</button></div>
-    <form hidden data-fix><label>الكلمة كما تنطقونها</label><input name="ar" value="${esc(e.ar)}"><div class="kbd"></div>
-    <label>المعنى بأسلوبك</label><input name="mean"><label>مثال وترجمته</label><textarea name="ex" rows="2"></textarea>
-    <label>نطق آخر في الجنوب أو منطقتك</label><input name="south"><div class="row"><button class="btn primary" type="submit">احفظ التصحيح</button></div></form>`:''}
+// ===== القاموس =====
+let cat='الكل', shown=40;
+function filtered(){const q=$('q').value.trim();return WORDS.filter(w=>(cat==='الكل'||w.cat===cat)&&(!q||w.ar.includes(q)||w.mean.includes(q)||w.lat.toLowerCase().includes(q.toLowerCase())));}
+function card(w){
+  const r=mine(w.id);
+  return `<article class="entry" data-id="${w.id}">
+   <div class="head"><span class="word">${esc(w.ar)}</span>${w.plural?`<span class="meta">جمعها ${esc(toArabic(w.plural))}</span>`:''}<span class="chip-slot">${chip(w.id)}</span></div>
+   <div class="mean">${esc(w.mean)}</div>
+   <div class="row"><span class="meta">${esc(w.pos||'')}${w.cat?' · '+esc(w.cat):''}</span><span class="latin">${esc(w.lat)}</span></div>
+   ${db?`<div class="row"><button class="btn" data-ok ${r?.verdict==='ok'?'disabled':''}>${r?.verdict==='ok'?'أكّدتَها':'صحيحة'}</button><button class="btn" data-fix>تصحيح</button></div>
+   <form hidden data-fixform class="row"><input name="ar" value="${esc(w.ar)}" aria-label="الكلمة الصحيحة"><button class="btn primary">احفظ</button></form>`:''}
   </article>`;
 }
 function renderDict(){
-  const q=$('q').value.trim();
-  const list=SEED.filter(e=>!q||e.ar.includes(q)||e.mean.includes(q)||e.lat.includes(q.toLowerCase()));
-  $('dictList').innerHTML=list.length?list.map(e=>card(e,false)).join(''):'<p class="empty">لا نتيجة. أضفها من تبويب «أضف كلمة».</p>';
+  const list=filtered();
+  $('count').textContent=`${list.length} كلمة`;
+  $('dictList').innerHTML=list.length?list.slice(0,shown).map(card).join(''):'<p class="empty">لا نتيجة. أضفها من «أضف كلمة».</p>';
+  $('more').hidden=list.length<=shown;
 }
-function renderRev(){
-  if(!db){$('revList').innerHTML='<p class="empty">المراجعة تحتاج تسجيل الدخول وصلاحية مساهم. اطلب من صاحب القاموس دعوتك.</p>';return;}
-  const done=new Set(reviews.filter(r=>r.uid===me).map(r=>r.entry));
-  const batch=SEED.filter(e=>!done.has(e.id)).slice(0,20);
-  $('revList').innerHTML=batch.length?batch.map(e=>card(e,true)).join(''):'<p class="empty">أتممتَ كل الكلمات المتاحة. شكراً لك.</p>';
-  $('revList').querySelectorAll('.kbd').forEach(k=>buildKbd(k,k.previousElementSibling));
+function renderCats(){
+  const cats=['الكل',...new Set(WORDS.map(w=>w.cat).filter(Boolean))];
+  $('cats').innerHTML=cats.map(c=>`<button class="cat" aria-pressed="${c===cat}">${esc(c)}</button>`).join('');
 }
-function buildKbd(box,input){
-  box.innerHTML=KEYS.map(k=>`<button type="button" aria-label="أدخل ${k}">${/[ً-ٟ]/.test(k)?'ـ'+k:k}</button>`).join('');
-  box.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{const k=KEYS[i],p=input.selectionStart??input.value.length;input.value=input.value.slice(0,p)+k+input.value.slice(p);input.focus();input.setSelectionRange(p+k.length,p+k.length);});
+$('cats').onclick=e=>{const b=e.target.closest('.cat');if(!b)return;cat=b.textContent;shown=40;renderCats();renderDict();};
+$('q').oninput=()=>{shown=40;renderDict();};
+$('more').onclick=()=>{shown+=40;renderDict();};
+async function save(col,id,data,statusEl,msg){
+  if(!db){statusEl.textContent='الحفظ يحتاج تسجيل الدخول وصلاحية مساهم.';return false;}
+  try{await db.collection(col).doc(id).set({...data,uid:me,t:Date.now()});statusEl.textContent=msg;return true;}
+  catch(e){statusEl.textContent=e.code==='not_granted'?'لا تملك صلاحية الكتابة. اطلب من صاحب القاموس دعوتك مساهماً.':'لم يُحفظ. تحقق من الاتصال وأعد المحاولة.';return false;}
 }
-async function saveReview(eid,data){
-  try{await db.collection('reviews').doc(eid+'__'+me).set({entry:eid,uid:me,t:Date.now(),...data});$('revStatus').textContent='حُفظت مراجعتك.';}
-  catch(e){$('revStatus').textContent='لم تُحفظ: '+(e.code==='not_granted'?'لا تملك صلاحية الكتابة.':'تحقق من الاتصال وأعد المحاولة.');}
-}
+$('dictList').addEventListener('click',e=>{
+  const art=e.target.closest('.entry'); if(!art) return; const id=art.dataset.id;
+  if(e.target.closest('[data-ok]')) save('reviews',id+'__'+me,{entry:id,verdict:'ok'},$('dictStatus'),'شكراً، سُجّل تأكيدك.');
+  if(e.target.closest('[data-fix]')) art.querySelector('[data-fixform]').hidden=false;
+});
+$('dictList').addEventListener('submit',e=>{
+  e.preventDefault(); const id=e.target.closest('.entry').dataset.id;
+  save('reviews',id+'__'+me,{entry:id,verdict:'fix',ar:e.target.ar.value},$('dictStatus'),'سُجّل تصحيحك.');
+});
 
+// ===== ترجم =====
+let trOffset=0;
+function renderTr(){
+  const pool=WORDS.filter(w=>!mine(w.id));
+  const batch=pool.slice(trOffset,trOffset+10);
+  $('trList').innerHTML=batch.length?batch.map(w=>`<form class="entry" data-id="${w.id}">
+    <div class="mean" style="font-weight:600">${esc(w.mean)}</div>
+    <div class="row"><input name="say" placeholder="كيف تقولونها؟" autocomplete="off" style="flex:1;min-width:10rem"><button class="btn primary">احفظ</button></div>
+    <details><summary class="meta">اقتراحنا من المصادر</summary><span class="word">${esc(w.ar)}</span></details>
+  </form>`).join(''):'<p class="empty">انتهت الكلمات. شكراً لك.</p>';
+}
+let lastInput=null;
+document.addEventListener('focusin',e=>{if(e.target.tagName==='INPUT')lastInput=e.target;});
+$('trList').addEventListener('submit',async e=>{
+  e.preventDefault(); const f=e.target, id=f.dataset.id, v=f.say.value.trim(); if(!v) return;
+  if(await save('reviews',id+'__'+me,{entry:id,verdict:'say',ar:v},$('trStatus'),'حُفظت. تابع.')) f.remove();
+});
+$('trNext').onclick=()=>{trOffset+=10;renderTr();};
+
+// ===== أضف =====
+$('addForm').onsubmit=async e=>{
+  e.preventDefault();
+  const ok=await save('proposals','p'+Date.now()+'_'+(me||'x').slice(-6),{ar:$('a-word').value.trim(),mean:$('a-mean').value.trim()},$('addStatus'),'أُضيفت الكلمة. أضف غيرها.');
+  if(ok) e.target.reset();
+};
+
+// ===== الحروف =====
+function renderAbc(){
+  const pending=LETTERS.filter(l=>!l[4]);
+  const votes=id=>letterVotes.filter(v=>v.letter===id);
+  $('abcBody').innerHTML=LETTERS.filter(l=>!l[4]).map(l=>{
+    const vs=votes(l[0]), my=vs.find(v=>v.uid===me), agree=vs.filter(v=>v.vote==='ok').length;
+    return `<tr data-l="${esc(l[0])}"><td class="big">${l[1]}</td><td>${esc(l[2])}<div class="latin">${esc(l[0])}</div></td><td>${esc(l[3])}</td>
+    <td><div class="row"><button class="btn ${my?.vote==='ok'?'primary':''}" data-v="ok">موافق</button><button class="btn" data-v="alt">غيره</button>${agree?`<span class="meta">${agree} موافق</span>`:''}</div>
+    <form hidden class="row"><input name="alt" placeholder="الحرف الذي تقترحه" aria-label="حرف بديل"><button class="btn primary">أرسل</button></form>
+    ${vs.filter(v=>v.vote==='alt').map(v=>`<div class="meta">اقتُرح: ${esc(v.alt)}</div>`).join('')}</td></tr>`;
+  }).join('')+`<tr><td colspan="4" class="meta">والباقي حروف عربية بأصواتها المعروفة: ${LETTERS.filter(l=>l[4]).map(l=>l[1]).join(' ')}</td></tr>`;
+}
+$('abcBody').addEventListener('click',e=>{
+  const b=e.target.closest('[data-v]'); if(!b) return; const tr=b.closest('tr'), l=tr.dataset.l;
+  if(b.dataset.v==='ok') save('letters',encodeURIComponent(l).replace(/%/g,'_')+'__'+me,{letter:l,vote:'ok'},$('abcStatus'),'سُجّلت موافقتك.');
+  else tr.querySelector('form').hidden=false;
+});
+$('abcBody').addEventListener('submit',e=>{
+  e.preventDefault(); const l=e.target.closest('tr').dataset.l;
+  save('letters',encodeURIComponent(l).replace(/%/g,'_')+'__'+me,{letter:l,vote:'alt',alt:e.target.alt.value},$('abcStatus'),'سُجّل اقتراحك.');
+});
+
+// ===== لوحة المفاتيح =====
+function buildKbd(box,getInput){
+  box.innerHTML=KEYS.map(k=>`<button type="button" aria-label="أدخل ${k}">${/[ً-ْ]/.test(k)?'ـ'+k:k}</button>`).join('');
+  box.querySelectorAll('button').forEach((b,i)=>{b.onmousedown=e=>e.preventDefault();b.onclick=()=>{const inp=getInput();if(!inp)return;const k=KEYS[i],p=inp.selectionStart??inp.value.length;inp.value=inp.value.slice(0,p)+k+inp.value.slice(p);inp.focus();inp.setSelectionRange(p+k.length,p+k.length);};});
+}
+buildKbd(document.querySelector('[data-for="a-word"]'),()=>$('a-word'));
+buildKbd($('trKbd'),()=>lastInput&&$('trList').contains(lastInput)?lastInput:$('trList').querySelector('input'));
+
+// ===== التبويب والتشغيل =====
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
-  ['dict','rev','add','abc'].forEach(s=>$(s).hidden=s!==b.dataset.tab);
+  ['dict','tr','add','abc'].forEach(s=>$(s).hidden=s!==b.dataset.tab);
+  if(b.dataset.tab==='tr')renderTr();
 });
-$('q').oninput=renderDict;
-$('revList').addEventListener('click',ev=>{
-  const b=ev.target.closest('[data-act]'); if(!b) return;
-  const art=b.closest('.entry'), id=art.dataset.id;
-  if(b.dataset.act==='ok') saveReview(id,{verdict:'ok'}); else art.querySelector('[data-fix]').hidden=false;
-});
-$('revList').addEventListener('submit',ev=>{
-  ev.preventDefault(); const f=ev.target, id=f.closest('.entry').dataset.id;
-  saveReview(id,{verdict:'fix',ar:f.ar.value,mean:f.mean.value,ex:f.ex.value,south:f.south.value});
-});
-$('addForm').onsubmit=async ev=>{
-  ev.preventDefault();
-  if(!db){$('addStatus').textContent='الإضافة تحتاج تسجيل الدخول وصلاحية مساهم.';return;}
-  try{await db.collection('proposals').add({ar:$('a-word').value,mean:$('a-mean').value,ex:$('a-ex').value,dom:$('a-dom').value,uid:me,t:Date.now()});
-    $('addStatus').textContent='وصلت الكلمة، وستظهر للمراجعين.'; ev.target.reset();}
-  catch(e){$('addStatus').textContent='لم تُرسل: تحقق من الاتصال أو من صلاحيتك.';}
-};
-document.querySelector('#abcTable tbody').innerHTML=ABC.map(r=>`<tr><td class="big">${r[0]}</td><td>${r[1]}</td><td class="latin">${r[2]}</td><td>${r[3]}</td></tr>`).join('');
-buildKbd(document.querySelector('[data-target="a-word"]'),$('a-word'));
-renderDict(); renderRev();
-
+function renderAll(){renderCats();renderDict();renderAbc();}
+(async()=>{
+  try{const r=await fetch('words.json');WORDS=prep(await r.json());}catch(e){WORDS=prep(FALLBACK);}
+  renderAll();
+})();
 (async()=>{
   try{
-    const user=await window.claude?.use?.('user'); db=await window.claude?.use?.('db');
-    if(!db||!user){db=null;renderRev();return;}
-    me=await user.id();
-    db.collection('reviews').onSnapshot(s=>{reviews=s.docs.map(d=>d.data());renderDict();renderRev();},()=>{});
-  }catch(e){db=null;renderRev();}
+    const user=await window.claude?.use?.('user'); const d=await window.claude?.use?.('db');
+    if(!d||!user) return;
+    me=await user.id(); db=d; renderDict();
+    db.collection('reviews').onSnapshot(s=>{reviews=s.docs.map(x=>x.data());
+      document.querySelectorAll('#dictList .entry').forEach(a=>{const sl=a.querySelector('.chip-slot');if(sl)sl.innerHTML=chip(a.dataset.id);});},()=>{});
+    db.collection('letters').onSnapshot(s=>{letterVotes=s.docs.map(x=>x.data());renderAbc();},()=>{});
+  }catch(e){}
 })();
 </script>

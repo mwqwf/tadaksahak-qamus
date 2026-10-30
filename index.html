@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>قاموس تدكصهك</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Kufi+Arabic:wght@500;700&display=swap">
 <style>
@@ -53,6 +58,8 @@ label{font-size:.85rem;color:var(--muted)}
 .rules{margin:0;padding-inline-start:1.2rem;display:grid;gap:4px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header>
@@ -69,7 +76,7 @@ label{font-size:.85rem;color:var(--muted)}
 
   <section id="dict">
     <div style="display:grid;gap:10px">
-      <input id="q" type="search" placeholder="ابحث بالكلمة أو بالمعنى">
+      <input id="q" type="search" placeholder="ابحث بالكلمة أو بالمعنى" aria-label="ابحث بالكلمة أو بالمعنى">
       <div class="cats" id="cats"></div>
       <p class="note" id="count"></p>
       <p class="status" id="dictStatus"></p>
@@ -179,7 +186,15 @@ function mine(id){return reviews.find(r=>r.entry===id&&r.uid===me);}
 
 // ===== القاموس =====
 let cat='الكل', shown=40;
-function filtered(){const q=$('q').value.trim();return WORDS.filter(w=>(cat==='الكل'||w.cat===cat)&&(!q||w.ar.includes(q)||w.mean.includes(q)||w.lat.toLowerCase().includes(q.toLowerCase())));}
+function searchKey(text){
+  // نهمل الحركات والنبرات، ونحفظ الحروف المميّزة للأصوات مثل ṭ وḍ وŋ.
+  return String(text??'').normalize('NFD').replace(/[\u0300-\u0302\u0304\u0306]/g,'')
+    .normalize('NFC').replace(/[\u064b-\u0652\u0670\u0640]/g,'').replace(/[أإآٱ]/g,'ا').toLowerCase();
+}
+function filtered(){
+  const q=searchKey($('q').value.trim());
+  return WORDS.filter(w=>(cat==='الكل'||w.cat===cat)&&(!q||[w.ar,w.mean,w.lat].some(value=>searchKey(value).includes(q))));
+}
 function card(w){
   const r=mine(w.id);
   return `<article class="entry" data-id="${w.id}">
@@ -205,7 +220,16 @@ $('q').oninput=()=>{shown=40;renderDict();};
 $('more').onclick=()=>{shown+=40;renderDict();};
 async function save(col,id,data,statusEl,msg){
   if(!db){statusEl.textContent='الحفظ يحتاج تسجيل الدخول وصلاحية مساهم.';return false;}
-  try{await db.collection(col).doc(id).set({...data,uid:me,t:Date.now()});statusEl.textContent=msg;return true;}
+  try{
+    const saved={...data,uid:me,t:Date.now()};
+    await db.collection(col).doc(id).set(saved);
+    // نحدّث الحالة بعد نجاح الحفظ، كي لا تعود الكلمة قبل وصول التحديث الحيّ.
+    if(col==='reviews'){
+      const index=reviews.findIndex(r=>r.entry===saved.entry&&r.uid===saved.uid);
+      if(index<0)reviews.push(saved);else reviews[index]=saved;
+    }
+    statusEl.textContent=msg;return true;
+  }
   catch(e){statusEl.textContent=e.code==='not_granted'?'لا تملك صلاحية الكتابة. اطلب من صاحب القاموس دعوتك مساهماً.':'لم يُحفظ. تحقق من الاتصال وأعد المحاولة.';return false;}
 }
 $('dictList').addEventListener('click',e=>{
@@ -219,10 +243,13 @@ $('dictList').addEventListener('submit',e=>{
 });
 
 // ===== ترجم =====
-let trOffset=0;
+let trOffset=0, trNextOffset=0;
 function renderTr(){
-  const pool=WORDS.filter(w=>!mine(w.id));
-  const batch=pool.slice(trOffset,trOffset+10);
+  // الموضع في ترتيب الكلمات الثابت، لا في قائمة تتقلّص مع كل مراجعة محفوظة.
+  const ordered=WORDS.slice(trOffset).concat(WORDS.slice(0,trOffset));
+  const batch=ordered.filter(w=>!mine(w.id)).slice(0,10);
+  trNextOffset=batch.length?(WORDS.indexOf(batch[batch.length-1])+1)%WORDS.length:0;
+  $('trNext').hidden=batch.length===0;
   $('trList').innerHTML=batch.length?batch.map(w=>`<form class="entry" data-id="${w.id}">
     <div class="mean" style="font-weight:600">${esc(w.mean)}</div>
     <div class="row"><input name="say" placeholder="كيف تقولونها؟" autocomplete="off" style="flex:1;min-width:10rem"><button class="btn primary">احفظ</button></div>
@@ -235,7 +262,7 @@ $('trList').addEventListener('submit',async e=>{
   e.preventDefault(); const f=e.target, id=f.dataset.id, v=f.say.value.trim(); if(!v) return;
   if(await save('reviews',id+'__'+me,{entry:id,verdict:'say',ar:v},$('trStatus'),'حُفظت. تابع.')) f.remove();
 });
-$('trNext').onclick=()=>{trOffset+=10;renderTr();};
+$('trNext').onclick=()=>{trOffset=trNextOffset;renderTr();};
 
 // ===== أضف =====
 $('addForm').onsubmit=async e=>{
@@ -296,3 +323,5 @@ function renderAll(){renderCats();renderDict();renderAbc();}
   }catch(e){}
 })();
 </script>
+</body>
+</html>
